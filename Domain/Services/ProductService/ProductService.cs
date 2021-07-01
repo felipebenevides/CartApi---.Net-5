@@ -1,17 +1,16 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces.Repository;
+using Domain.Interfaces.Service;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Data.Repository
+namespace Domain.Services
 {
-    public class ProductRepository : IProductRepository
+    public class ProductService : IProductService
     {
         private readonly IProductRepository _productRepository;
-        public ProductRepository(IProductRepository productRepository)
+        public ProductService(IProductRepository productRepository)
         {
             _productRepository = productRepository;
         }
@@ -22,12 +21,12 @@ namespace Data.Repository
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            GC.SuppressFinalize(this);
         }
 
         public IEnumerable<Product> GetAll()
         {
-            return _productRepository.GetAll();
+            return  _productRepository.GetAll();
         }
 
         public async Task<IEnumerable<Product>> GetAllAsync()
@@ -35,12 +34,7 @@ namespace Data.Repository
             return await _productRepository.GetAllAsync();
         }
 
-        public Product GetById(Guid id)
-        {
-            return _productRepository.GetById(id);
-        }
-
-        public async Task<Product> GetByIdAsync(Guid id)
+        public async Task<Product> GetById(Guid id)
         {
             return await _productRepository.GetByIdAsync(id);
         }

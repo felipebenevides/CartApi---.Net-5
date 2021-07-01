@@ -2,7 +2,7 @@
 
 namespace Domain.Interfaces.Service
 {
-    public interface ICategoryService: IService<Category>
+    public interface ICartService : IService<Cart>
     {
     }
 }

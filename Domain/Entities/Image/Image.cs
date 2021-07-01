@@ -2,12 +2,9 @@
 
 namespace Domain.Entities
 {
-    public class SubCategory : BaseEntity, ITrackableEntity
+    public class Image : BaseEntity, ITrackableEntity
     {
-        public string Name { get; set; }
-
-        public Guid CategoryId { get; set; }
-        public Category Category { get; set; }
+        public string Url  { get; set; }
 
         public DateTime CreateDate { get; set; }
         public DateTime? ModifyDate { get; set; }

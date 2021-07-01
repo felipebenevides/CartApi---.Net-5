@@ -1,42 +1,49 @@
-﻿using Domain.Interfaces.Service.IMenuService;
+﻿using Domain.Entities;
+using Domain.Interfaces.Repository;
+using Domain.Interfaces.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Services.MenuService
+namespace Domain.Services
 {
     public class CategoryService : ICategoryService
     {
-        public Task AddOrUpdate(ICategoryService entity)
+        private readonly ICategoryRepository _categoryRepository;
+        public CategoryService(ICategoryRepository categoryRepository)
         {
-            throw new NotImplementedException();
+            _categoryRepository = categoryRepository;
+        }
+        public async Task AddOrUpdate(Category entity)
+        {
+            await _categoryRepository.AddOrUpdate(entity);
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            GC.SuppressFinalize(this);
         }
 
-        public IEnumerable<ICategoryService> GetAll()
+        public IEnumerable<Category> GetAll()
         {
-            throw new NotImplementedException();
+            return  _categoryRepository.GetAll();
         }
 
-        public Task<IEnumerable<ICategoryService>> GetAllAsync()
+        public async Task<IEnumerable<Category>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _categoryRepository.GetAllAsync();
         }
 
-        public Task<ICategoryService> GetById(Guid id)
+        public async Task<Category> GetById(Guid id)
         {
-            throw new NotImplementedException();
+            return await _categoryRepository.GetByIdAsync(id);
         }
 
-        public Task Remove(ICategoryService entity)
+        public async Task Remove(Category entity)
         {
-            throw new NotImplementedException();
+            await _categoryRepository.Remove(entity);
         }
     }
 }

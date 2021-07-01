@@ -25,7 +25,10 @@ namespace Data.Context
         DbSet<Category> Categories { get; set; }
         DbSet<SubCategory> subCategories { get; set; }
         DbSet<Product> Products { get; set; }
+        DbSet<Cart> Carts { get; set; }
+        DbSet<Image> Images { get; set; }
 
+        DbSet<ProductImage> ProductImages { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -41,6 +44,8 @@ namespace Data.Context
             modelBuilder.ApplyConfiguration(new ProductMapping());
             modelBuilder.ApplyConfiguration(new CategoryMapping());
             modelBuilder.ApplyConfiguration(new SubCategoryMapping());
+            modelBuilder.ApplyConfiguration(new ProductImageMapping());
+            modelBuilder.ApplyConfiguration(new CartMapping());
 
             modelBuilder
               .Entity<Product>()
