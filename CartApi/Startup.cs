@@ -1,4 +1,10 @@
 using CartApi.Configurations;
+using Data.Context;
+using Data.Repository;
+using Domain.Interfaces.Repository;
+using Domain.Interfaces.Service;
+using Domain.Services;
+using Domain.Services.Cache;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,6 +17,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace CartApi
@@ -36,6 +43,43 @@ namespace CartApi
 
             // Setting DBContexts
             services.AddDatabaseConfiguration(Configuration);
+
+            #region Services
+
+            services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<ISubCategoryService, SubCategoryService>();
+            services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<ICartService, CartService>();
+
+            #endregion
+
+            #region Repositories
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<ISubCategoryRepository, SubCategoryRepository>();
+            services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<ICartRepository, CartRepository>();
+            #endregion
+
+            services.AddTransient<ICacheService, CacheService>();
+
+            services.AddScoped<CartDbContext>();
+
+            services.AddControllers()
+                .AddJsonOptions(x =>
+                    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+
+            ConfigureExternalCache(services);
+        }
+
+        private void ConfigureExternalCache(IServiceCollection services)
+        {
+            services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = Configuration["Infrastructure:ConexaoRedis"];
+                options.InstanceName = "APIConectaPrime";
+            });
+
+            services.AddScoped<CacheService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

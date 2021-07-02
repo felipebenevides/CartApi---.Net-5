@@ -19,7 +19,7 @@ namespace CartApi.Configurations
 
             services.AddDbContext<CartDbContext>((serviceProvider, options) =>
             {
-                options.UseNpgsql(configuration.GetConnectionString("ImobiDB"), providerOptions => providerOptions.EnableRetryOnFailure());
+                options.UseNpgsql(configuration.GetConnectionString("ApiCartDB"), providerOptions => providerOptions.EnableRetryOnFailure());
             });
         }
     }

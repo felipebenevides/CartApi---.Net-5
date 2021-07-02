@@ -1,13 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Domain.Entities
 {
-    public class SubCategory : BaseEntity, ITrackableEntity
+    public class Cart : BaseEntity, ITrackableEntity
     {
-        public string Name { get; set; }
 
-        public Guid CategoryId { get; set; }
-        public Category Category { get; set; }
+        public List<CartItem> Items { get; set; }
 
         public DateTime CreateDate { get; set; }
         public DateTime? ModifyDate { get; set; }

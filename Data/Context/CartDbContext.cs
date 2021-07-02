@@ -22,10 +22,14 @@ namespace Data.Context
         {
         }
 
-        DbSet<Category> Categories { get; set; }
-        DbSet<SubCategory> subCategories { get; set; }
-        DbSet<Product> Products { get; set; }
 
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<SubCategory> subCategories { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<Image> Images { get; set; }
+        //public DbSet<ProductImage> ProductImages { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -41,6 +45,9 @@ namespace Data.Context
             modelBuilder.ApplyConfiguration(new ProductMapping());
             modelBuilder.ApplyConfiguration(new CategoryMapping());
             modelBuilder.ApplyConfiguration(new SubCategoryMapping());
+            //modelBuilder.ApplyConfiguration(new ProductImageMapping());
+            modelBuilder.ApplyConfiguration(new CartMapping());
+            modelBuilder.ApplyConfiguration(new CartItemMapping());
 
             modelBuilder
               .Entity<Product>()
@@ -81,18 +88,18 @@ namespace Data.Context
         }
 
         public async Task<int> RemoveAsync()
+        {
+            ChangeTracker.DetectChanges();
+
+            foreach (var entry in ChangeTracker.Entries<ITrackableEntity>())
             {
-                ChangeTracker.DetectChanges();
-
-                foreach (var entry in ChangeTracker.Entries<ITrackableEntity>())
+                if (entry.State == EntityState.Modified)
                 {
-                    if (entry.State == EntityState.Modified)
-                    {
-                        entry.Property("Inactive").CurrentValue = true;
-                    }
+                    entry.Property("Inactive").CurrentValue = true;
                 }
-
-                return await base.SaveChangesAsync();
             }
+
+            return await base.SaveChangesAsync();
         }
     }
+}

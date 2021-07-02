@@ -3,21 +3,23 @@ using System;
 using Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(CartDbContext))]
-    partial class CartDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210701193338_imagesproduct")]
+    partial class imagesproduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.7")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
+                .HasAnnotation("ProductVersion", "3.1.16")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("Domain.Entities.Cart", b =>
                 {
@@ -34,45 +36,14 @@ namespace Data.Migrations
                     b.Property<DateTime?>("ModifyDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("Carts");
-                });
-
-            modelBuilder.Entity("Domain.Entities.CartItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("CartId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<bool>("Inactive")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime?>("ModifyDate")
-                        .HasColumnType("timestamp without time zone");
-
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid");
 
-                    b.Property<decimal>("TotalPriceItem")
-                        .HasColumnType("numeric");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("CartId");
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartItems");
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("Domain.Entities.Category", b =>
@@ -130,6 +101,9 @@ namespace Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<int>("Amount")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Color")
                         .HasColumnType("text");
 
@@ -170,6 +144,27 @@ namespace Data.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("Domain.Entities.ProductImage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ImageId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ImageId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductImageMappings");
+                });
+
             modelBuilder.Entity("Domain.Entities.SubCategory", b =>
                 {
                     b.Property<Guid>("Id")
@@ -198,38 +193,13 @@ namespace Data.Migrations
                     b.ToTable("SubCategories");
                 });
 
-            modelBuilder.Entity("ImageProduct", b =>
+            modelBuilder.Entity("Domain.Entities.Cart", b =>
                 {
-                    b.Property<Guid>("ImagesId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ProductsId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("ImagesId", "ProductsId");
-
-                    b.HasIndex("ProductsId");
-
-                    b.ToTable("ImageProduct");
-                });
-
-            modelBuilder.Entity("Domain.Entities.CartItem", b =>
-                {
-                    b.HasOne("Domain.Entities.Cart", "Cart")
-                        .WithMany("Items")
-                        .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Entities.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Cart");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Domain.Entities.Product", b =>
@@ -239,8 +209,21 @@ namespace Data.Migrations
                         .HasForeignKey("SubCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
 
-                    b.Navigation("Category");
+            modelBuilder.Entity("Domain.Entities.ProductImage", b =>
+                {
+                    b.HasOne("Domain.Entities.Image", "Property")
+                        .WithMany()
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Product", "Product")
+                        .WithMany("Images")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.SubCategory", b =>
@@ -250,33 +233,6 @@ namespace Data.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("ImageProduct", b =>
-                {
-                    b.HasOne("Domain.Entities.Image", null)
-                        .WithMany()
-                        .HasForeignKey("ImagesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Entities.Cart", b =>
-                {
-                    b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Category", b =>
-                {
-                    b.Navigation("SubCategories");
                 });
 #pragma warning restore 612, 618
         }
