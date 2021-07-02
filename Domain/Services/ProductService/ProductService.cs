@@ -43,5 +43,12 @@ namespace Domain.Services
         {
             await _productRepository.Remove(entity);
         }
+
+        public async Task<List<Product>>ListByCategory(Guid idCategory)
+        {
+            // var result = _productRepository.Ge
+
+            return null;
+        }
     }
 }

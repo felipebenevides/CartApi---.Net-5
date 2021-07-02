@@ -41,6 +41,11 @@ namespace Domain.Services
             return await _categoryRepository.GetByIdAsync(id);
         }
 
+        public async Task<List<Category>> ListMenu()
+        {
+            return await _categoryRepository.ListMenu();
+        }
+
         public async Task Remove(Category entity)
         {
             await _categoryRepository.Remove(entity);

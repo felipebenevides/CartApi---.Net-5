@@ -12,7 +12,6 @@ namespace Domain.Entities
         public string Description { get; set; }
         public int Evaluation { get; set; }
         public decimal Price { get; set; }
-        public int Amount { get; set; }
         public Guid SubCategoryId { get; set; }
         public SubCategory Category { get; set; }
         public List<ProductImage> Images { get; set; }

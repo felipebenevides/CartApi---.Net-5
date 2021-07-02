@@ -2,12 +2,13 @@
 using Domain.Interfaces.Service;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CartApi.Controllers.Menu
 {
     [ApiController]
-    [Route("menu")]
+    [Route("api/menu")]
     public class MenuController : ApiController
     {
         private readonly ICategoryService _categoryService;
@@ -31,7 +32,7 @@ namespace CartApi.Controllers.Menu
         {
             try
             {
-               await _categoryService.AddOrUpdate(model);
+                await _categoryService.AddOrUpdate(model);
                 return CustomResponse(model);
             }
             catch (Exception ex)
@@ -48,13 +49,48 @@ namespace CartApi.Controllers.Menu
         /// <returns></returns>
         [HttpPost]
         [Route("create-sub-category")]
-
         public async Task<IActionResult> RegisterMenuSubCategory([FromBody] SubCategory model)
         {
             try
             {
                 await _subCategoryService.AddOrUpdate(model);
                 return CustomResponse(model);
+            }
+            catch (Exception ex)
+            {
+                AddError("Erro ao cadastrar Sub Categoria");
+                return CustomResponse();
+            }
+        }
+
+
+        [HttpGet]
+        [Route("list-menu")]
+
+        public async Task<IActionResult> ListMenu ()
+        {
+            try
+            {
+                var result = await _categoryService.ListMenu();
+                return CustomResponse(result);
+            }
+            catch (Exception ex)
+            {
+                AddError("Erro ao cadastrar Sub Categoria");
+                return CustomResponse();
+            }
+        }
+
+        [HttpGet]
+        [Route("list-main-categories")]
+
+        public async Task<IActionResult> ListMainCategories()
+        {
+            try
+            {
+                var result = await _categoryService.ListMenu();
+                var filter = result.Where(w => w.IsMain).ToList();
+                return CustomResponse(filter);
             }
             catch (Exception ex)
             {

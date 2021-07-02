@@ -68,6 +68,17 @@ namespace CartApi
 
         }
 
+        //private void ConfigureExternalCache(IServiceCollection services)
+        //{
+        //    services.AddDistributedRedisCache(options =>
+        //    {
+        //        options.Configuration = Configuration["Infrastructure:ConexaoRedis"];
+        //        options.InstanceName = "APIConectaPrime";
+        //    });
+
+        //    services.AddScoped<CacheService>();
+        //}
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

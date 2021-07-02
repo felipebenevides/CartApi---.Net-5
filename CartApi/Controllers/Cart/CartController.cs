@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace CartApi.Controllers
 {
     [ApiController]
-    [Route("cart")]
+    [Route("api/cart")]
     public class CartController : ApiController
     {
         private ICartService _cartService;
