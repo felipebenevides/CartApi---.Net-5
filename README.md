@@ -1,4 +1,4 @@
-# CartApi---.Net-5
+# CartApi .Net 5
 
 
 # Readme em construção 
@@ -80,3 +80,17 @@ Body esperado:
 }
 
 
+Carrinho
+POST
+/api/cart/send-cart
+{
+  "items": [
+    {
+      "productId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "amount": 0,
+      "totalPriceItem": 0
+    
+    }
+  ]
+ 
+}
