@@ -1,7 +1,7 @@
 # CartApi .Net 5
 
 
-# Readme em construção 
+## Readme em construção 
 
 
 comando para iniciar postgresql com docker:
@@ -14,8 +14,8 @@ docker run -d -p 6379:6379 --name redis1 redis
 
 obs: em redis1 colocar o nome atribuido a imagem.
 
-
-Cadastro de Categoria.
+```yaml
+### Cadastro de Categoria.
 
 Post
 Endpont : /api/menu/create-category
@@ -29,7 +29,7 @@ exemplo body:
   
 }
 
-Cadastro de Sub Categoria:
+### Cadastro de Sub Categoria:
 
 Post
 Endpoint: /api/menu/create-sub-category
@@ -43,17 +43,19 @@ ex body
  
 }
 
-Listagem de Menu
+ ### Listagem de Menu
 
 GET
 /api/menu/list-menu
 
 
-Listagem das Principais Categorias : /api/menu/list-main-categories
+### Listagem das Principais Categorias : 
+
+/api/menu/list-main-categories
 
 
 
-Cadastro de Produtos:
+### Cadastro de Produtos:
 
 POST
 Endpoint: /api/product/create
@@ -80,7 +82,7 @@ Body esperado:
 }
 
 
-Carrinho
+### Carrinho
 POST
 /api/cart/send-cart
 {
