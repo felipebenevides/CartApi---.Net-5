@@ -29,7 +29,7 @@ namespace Data.Context
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<Image> Images { get; set; }
-        public DbSet<ProductImage> ProductImages { get; set; }
+        //public DbSet<ProductImage> ProductImages { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -45,7 +45,7 @@ namespace Data.Context
             modelBuilder.ApplyConfiguration(new ProductMapping());
             modelBuilder.ApplyConfiguration(new CategoryMapping());
             modelBuilder.ApplyConfiguration(new SubCategoryMapping());
-            modelBuilder.ApplyConfiguration(new ProductImageMapping());
+            //modelBuilder.ApplyConfiguration(new ProductImageMapping());
             modelBuilder.ApplyConfiguration(new CartMapping());
             modelBuilder.ApplyConfiguration(new CartItemMapping());
 

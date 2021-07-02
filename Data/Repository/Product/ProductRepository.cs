@@ -23,7 +23,7 @@ namespace Data.Repository
             var result = await _context.Products
                 .Where(w => w.Category != null && w.Category.CategoryId == categoryId)
                 .AsNoTracking()
-                .Include(i => i.Images)
+                //.Include(i => i.Images)
                 .ToListAsync();
 
             return result;

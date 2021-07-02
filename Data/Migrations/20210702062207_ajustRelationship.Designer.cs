@@ -3,15 +3,17 @@ using System;
 using Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(CartDbContext))]
-    partial class CartDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210702062207_ajustRelationship")]
+    partial class ajustRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -203,12 +205,12 @@ namespace Data.Migrations
                     b.Property<Guid>("ImagesId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ProductsId")
+                    b.Property<Guid>("ImagesId1")
                         .HasColumnType("uuid");
 
-                    b.HasKey("ImagesId", "ProductsId");
+                    b.HasKey("ImagesId", "ImagesId1");
 
-                    b.HasIndex("ProductsId");
+                    b.HasIndex("ImagesId1");
 
                     b.ToTable("ImageProduct");
                 });
@@ -264,7 +266,7 @@ namespace Data.Migrations
 
                     b.HasOne("Domain.Entities.Product", null)
                         .WithMany()
-                        .HasForeignKey("ProductsId")
+                        .HasForeignKey("ImagesId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

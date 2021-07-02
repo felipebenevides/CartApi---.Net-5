@@ -14,7 +14,7 @@ namespace Domain.Entities
         public decimal Price { get; set; }
         public Guid SubCategoryId { get; set; }
         public SubCategory Category { get; set; }
-        public List<ProductImage> Images { get; set; }
+        public ICollection<Image> Images { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime? ModifyDate { get; set; }
 

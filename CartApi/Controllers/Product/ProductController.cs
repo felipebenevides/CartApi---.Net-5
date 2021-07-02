@@ -52,6 +52,36 @@ namespace CartApi.Controllers
             }
         }
 
+
+
+        [HttpGet]
+        [Route("{productId}")]
+        public async Task<IActionResult> GetProduct(Guid productId)
+        {
+            try
+            {
+                var key = $"{nameof(ProductController)}:{nameof(GetProduct)}:{productId}";
+
+                var vmCache = await Cache.GetAsync<Product>(key);
+                if (vmCache != null)
+                    return CustomResponse(vmCache);
+
+                var result = await _productService.GetById(productId);
+
+                if (result != null)
+                    await Cache.SetAsync(key, result, TimeSpan.FromDays(1));
+
+
+                return CustomResponse(result);
+            }
+            catch (Exception ex)
+            {
+                AddError("Erro ao cadastrar Sub Categoria");
+                return CustomResponse();
+            }
+        }
+
+
         [HttpPost]
         [Route("create")]
         public async Task<IActionResult> Create([FromBody] Product model)

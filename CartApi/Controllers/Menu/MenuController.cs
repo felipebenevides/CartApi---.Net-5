@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces.Service;
+using Domain.Services.Cache;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
@@ -13,13 +14,14 @@ namespace CartApi.Controllers.Menu
     {
         private readonly ICategoryService _categoryService;
         private readonly ISubCategoryService _subCategoryService;
-        //private readonly ICategoryService _categoryService;
 
         public MenuController(ICategoryService categoryService, ISubCategoryService subCategoryService)
         {
             _categoryService = categoryService;
             _subCategoryService = subCategoryService;
         }
+        private CacheService Cache => GetService<CacheService>();
+
 
         /// <summary>
         /// Cadastra Categorias
@@ -67,16 +69,26 @@ namespace CartApi.Controllers.Menu
         [HttpGet]
         [Route("list-menu")]
 
-        public async Task<IActionResult> ListMenu ()
+        public async Task<IActionResult> ListMenu()
         {
             try
             {
+                var key = $"{nameof(ProductController)}:{nameof(ListMenu)}";
+
+                var vmCache = await Cache.GetAsync<Product>(key);
+                if (vmCache != null)
+                    return CustomResponse(vmCache);
+
                 var result = await _categoryService.ListMenu();
+
+                if (result != null)
+                    await Cache.SetAsync(key, result, TimeSpan.FromMinutes(5));
+
                 return CustomResponse(result);
             }
             catch (Exception ex)
             {
-                AddError("Erro ao cadastrar Sub Categoria");
+                AddError("Erro ao listar veiculos");
                 return CustomResponse();
             }
         }
@@ -88,19 +100,26 @@ namespace CartApi.Controllers.Menu
         {
             try
             {
+                var key = $"{nameof(ProductController)}:{nameof(ListMainCategories)}";
+
+                var vmCache = await Cache.GetAsync<Product>(key);
+                if (vmCache != null)
+                    return CustomResponse(vmCache);
+
                 var result = await _categoryService.ListMenu();
                 var filter = result.Where(w => w.IsMain).ToList();
+
+                if (filter != null)
+                    await Cache.SetAsync(key, filter, TimeSpan.FromMinutes(5));
+
                 return CustomResponse(filter);
             }
             catch (Exception ex)
             {
-                AddError("Erro ao cadastrar Sub Categoria");
+                AddError("Erro ao Listar Categorias");
                 return CustomResponse();
             }
         }
-
-
-
 
     }
 }

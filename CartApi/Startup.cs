@@ -69,7 +69,6 @@ namespace CartApi
                     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 
             ConfigureExternalCache(services);
-
         }
 
         private void ConfigureExternalCache(IServiceCollection services)
