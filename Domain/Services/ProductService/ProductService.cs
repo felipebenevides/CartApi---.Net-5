@@ -44,11 +44,13 @@ namespace Domain.Services
             await _productRepository.Remove(entity);
         }
 
-        public async Task<List<Product>>ListByCategory(Guid idCategory)
-        {
-            // var result = _productRepository.Ge
 
-            return null;
+
+        public async Task<List<Product>> ListByCategoryId(Guid categoryId)
+        {
+            var result = await _productRepository.ListByCategoryId(categoryId);
+
+            return result;
         }
     }
 }

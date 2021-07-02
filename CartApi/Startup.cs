@@ -4,6 +4,7 @@ using Data.Repository;
 using Domain.Interfaces.Repository;
 using Domain.Interfaces.Service;
 using Domain.Services;
+using Domain.Services.Cache;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -59,6 +60,7 @@ namespace CartApi
             services.AddTransient<ICartRepository, CartRepository>();
             #endregion
 
+            services.AddTransient<ICacheService, CacheService>();
 
             services.AddScoped<CartDbContext>();
 
@@ -66,18 +68,20 @@ namespace CartApi
                 .AddJsonOptions(x =>
                     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 
+            ConfigureExternalCache(services);
+
         }
 
-        //private void ConfigureExternalCache(IServiceCollection services)
-        //{
-        //    services.AddDistributedRedisCache(options =>
-        //    {
-        //        options.Configuration = Configuration["Infrastructure:ConexaoRedis"];
-        //        options.InstanceName = "APIConectaPrime";
-        //    });
+        private void ConfigureExternalCache(IServiceCollection services)
+        {
+            services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = Configuration["Infrastructure:ConexaoRedis"];
+                options.InstanceName = "APIConectaPrime";
+            });
 
-        //    services.AddScoped<CacheService>();
-        //}
+            services.AddScoped<CacheService>();
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

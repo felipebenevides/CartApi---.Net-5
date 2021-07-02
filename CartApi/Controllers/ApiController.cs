@@ -10,6 +10,7 @@ namespace CartApi.Controllers
     [ApiController]
     public abstract class ApiController : ControllerBase
     {
+        protected TService GetService<TService>() => (TService)HttpContext.RequestServices.GetService(typeof(TService));
 
         public ApiController()
         {
